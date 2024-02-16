@@ -16,7 +16,7 @@
     <servlet-class>com.durante.login</servlet-class>
     <init-param>
     	<param-name>db_url</param-name>
-    	<param-value>localhost:3306/durante_01_database</param-value>
+    	<param-value>silvaricci.westeurope.cloudapp.azure.com:3306/Durante_preferenze</param-value>
     </init-param>
     <init-param>
     	<param-name>db_usr</param-name>
@@ -34,7 +34,7 @@
     <servlet-class>com.durante.preferenza</servlet-class>
     <init-param>
     	<param-name>db_url</param-name>
-    	<param-value>localhost:3306/durante_01_database</param-value>
+    	<param-value>silvaricci.westeurope.cloudapp.azure.com:3306/Durante_preferenze</param-value>
     </init-param>
     <init-param>
     	<param-name>db_usr</param-name>
