@@ -53,7 +53,7 @@ public class login extends HttpServlet {
 		String username = reqt.getParameter("username");
 		String password = reqt.getParameter("password");
 		
-		String query = "SELECT username FROM utente WHERE username = '"+ username + "' AND password = '"+ password + "'";
+		String query = "SELECT username,idClasse FROM studenti WHERE username = '"+ username + "' AND password = '"+ password + "'";
 		
 		try {
 			res.setContentType("text/html");
@@ -62,11 +62,24 @@ public class login extends HttpServlet {
 			
 			ResultSet result = conn.createStatement().executeQuery(query);
 			if(result.next()) {
+                
+				int idClasse = result.getInt("idClasse");
+
 				buffer.append("<html><title>Logged user: "+username+"</title>");
 				buffer.append("<body><form name='preferenza' action='http://localhost:8080/01_TestMavenEclipse/preferenza' method='GET'>");
-				buffer.append("<p>Nome Prof.: <INPUT TYPE='text' NAME='nomeProf' SIZE=30></p>");
-				buffer.append("<p>Cognome Prof.: <INPUT TYPE='text' NAME='cognomeProf' SIZE=30></p>");
-				buffer.append("<p>Materia: <INPUT TYPE='text' NAME='materia' SIZE=30></p>");
+                buffer.append("<p>Username: <INPUT TYPE='text' NAME='usrStudente' SIZE=30 value='" + username + "' disabled></p>");
+				buffer.append("<p>Cognome Prof.: <SELECT NAME='cognomeProf'>");
+                buffer.append("<option value='-1' selected> Seleziona una preferenza </option>");
+
+				query = "SELECT idProfessore,cognomeProfessore FROM professori WHERE idClasse= '"+ idClasse+"'";
+				ResultSet prof= conn.createStatement().executeQuery(query);
+				while(prof.next()){
+					int idProfessore = result.getInt("idProfessore");
+					String cognomeProfessore = result.getString("cognomeProfessore");
+					buffer.append("<option value='"+ idProfessore +"'> "+ cognomeProfessore +" </option>");
+				}
+
+				buffer.append("</select> </p>");
 				buffer.append("<p><INPUT TYPE='submit'></p>");
 				buffer.append("<p><INPUT TYPE='reset' NAME='resetbutton' VALUE='Clear data'> </p>");
 				buffer.append("</form></body></html>");
@@ -87,3 +100,12 @@ public class login extends HttpServlet {
 	}
 
 }
+
+
+
+
+
+
+
+
+

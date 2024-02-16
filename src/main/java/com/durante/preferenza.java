@@ -51,11 +51,10 @@ public class preferenza extends HttpServlet {
 		
 		try {
 			res.setContentType("text/html");
-			String nomeProf = reqt.getParameter("nomeProf");
-			String cognomeProf = reqt.getParameter("cognomeProf");
-			String materia = reqt.getParameter("materia");
+			String matricola = reqt.getParameter("matricola");
+			String idProfessore = reqt.getParameter("idProfessore");
 
-			String sql = "INSERT INTO preferenze (nomeProf, cognomeProf, materia) VALUES ('"+nomeProf+"', '"+cognomeProf+"', '"+materia+"')";
+			String sql = "INSERT INTO preferenze (matricola, idProfessore) VALUES ('"+matricola+"', '"+idProfessore+")";
 			
 			
 			PreparedStatement statement = conn.prepareStatement(sql);
@@ -65,7 +64,7 @@ public class preferenza extends HttpServlet {
 			if (rowsInserted > 0) {
 			    System.out.println("Preferenza inserita!");
 			} else {
-			    System.out.println("Errore.");
+			    System.out.println("Errore. Preferenza già inserita.	");
 			}
 
 			statement.close();
