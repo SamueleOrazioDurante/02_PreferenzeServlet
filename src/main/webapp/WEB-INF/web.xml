@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="https://jakarta.ee/xml/ns/jakartaee" xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee https://jakarta.ee/xml/ns/jakartaee/web-app_5_0.xsd" id="WebApp_ID" version="5.0">
-  <display-name>01_TestMavenEclipse</display-name>
+  <display-name>02_PreferenzeServlet</display-name>
   <welcome-file-list>
     <welcome-file>index.html</welcome-file>
     <welcome-file>index.jsp</welcome-file>
@@ -15,16 +15,16 @@
     <servlet-name>login</servlet-name>
     <servlet-class>com.durante.login</servlet-class>
     <init-param>
-    	<param-name>db_url</param-name>
-    	<param-value>silvaricci.westeurope.cloudapp.azure.com:3306/Durante_preferenze</param-value>
+      <param-name>db_url</param-name>
+      <param-value>silvaricci.westeurope.cloudapp.azure.com:3306/Durante_preferenze</param-value>
     </init-param>
     <init-param>
-    	<param-name>db_usr</param-name>
-    	<param-value>admin</param-value>
+      <param-name>db_usr</param-name>
+      <param-value>admin</param-value>
     </init-param>
     <init-param>
-    	<param-name>db_psw</param-name>
-    	<param-value>admin</param-value>
+      <param-name>db_psw</param-name>
+      <param-value>admin</param-value>
     </init-param>
   </servlet>
   <servlet>
@@ -33,16 +33,16 @@
     <servlet-name>preferenza</servlet-name>
     <servlet-class>com.durante.preferenza</servlet-class>
     <init-param>
-    	<param-name>db_url</param-name>
-    	<param-value>silvaricci.westeurope.cloudapp.azure.com:3306/Durante_preferenze</param-value>
+      <param-name>db_url</param-name>
+      <param-value>silvaricci.westeurope.cloudapp.azure.com:3306/Durante_preferenze</param-value>
     </init-param>
     <init-param>
-    	<param-name>db_usr</param-name>
-    	<param-value>admin</param-value>
+      <param-name>db_usr</param-name>
+      <param-value>admin</param-value>
     </init-param>
     <init-param>
-    	<param-name>db_psw</param-name>
-    	<param-value>admin</param-value>
+      <param-name>db_psw</param-name>
+      <param-value>admin</param-value>
     </init-param>
   </servlet>
   <servlet-mapping>

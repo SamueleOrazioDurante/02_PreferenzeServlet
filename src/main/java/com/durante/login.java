@@ -53,7 +53,7 @@ public class login extends HttpServlet {
 		String username = reqt.getParameter("username");
 		String password = reqt.getParameter("password");
 		
-		String query = "SELECT username,idClasse FROM studenti WHERE username = '"+ username + "' AND password = '"+ password + "'";
+		String query = "SELECT usernameStudente,idClasse,matricola FROM studenti WHERE usernameStudente = '"+ username + "' AND password = '"+ password + "'";
 		
 		try {
 			res.setContentType("text/html");
@@ -64,18 +64,20 @@ public class login extends HttpServlet {
 			if(result.next()) {
                 
 				int idClasse = result.getInt("idClasse");
+				int matricola = result.getInt("matricola");
 
 				buffer.append("<html><title>Logged user: "+username+"</title>");
-				buffer.append("<body><form name='preferenza' action='http://localhost:8080/01_TestMavenEclipse/preferenza' method='GET'>");
-                buffer.append("<p>Username: <INPUT TYPE='text' NAME='usrStudente' SIZE=30 value='" + username + "' disabled></p>");
-				buffer.append("<p>Cognome Prof.: <SELECT NAME='cognomeProf'>");
+				buffer.append("<body><form name='preferenza' action='http://localhost:8080/02_PreferenzeServlet/preferenza' method='GET'>");
+				buffer.append("<INPUT TYPE='hidden' NAME='matricola' SIZE=30 value='" + matricola + "' readonly>");
+                buffer.append("<p>Username: <INPUT TYPE='text' NAME='username' SIZE=30 value='" + username + "' readonly disabled></p>");
+				buffer.append("<p>Cognome Prof.: <SELECT NAME='idProfessore'>");
                 buffer.append("<option value='-1' selected> Seleziona una preferenza </option>");
 
 				query = "SELECT idProfessore,cognomeProfessore FROM professori WHERE idClasse= '"+ idClasse+"'";
 				ResultSet prof= conn.createStatement().executeQuery(query);
 				while(prof.next()){
-					int idProfessore = result.getInt("idProfessore");
-					String cognomeProfessore = result.getString("cognomeProfessore");
+					int idProfessore = prof.getInt("idProfessore");
+					String cognomeProfessore = prof.getString("cognomeProfessore");
 					buffer.append("<option value='"+ idProfessore +"'> "+ cognomeProfessore +" </option>");
 				}
 
