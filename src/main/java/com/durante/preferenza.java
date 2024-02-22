@@ -51,6 +51,9 @@ public class preferenza extends HttpServlet {
 	@Override
 	public void doGet(HttpServletRequest reqt, HttpServletResponse res) throws IOException
 	{
+		
+		//INSERIRE SESSIONI
+		
 		res.setContentType("text/html");
 		PrintWriter out = res.getWriter();
 		StringBuffer buffer = new StringBuffer();
