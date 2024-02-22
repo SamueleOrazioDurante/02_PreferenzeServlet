@@ -67,8 +67,6 @@ public class preferenza extends HttpServlet {
 			
 			int rowsInserted = statement.executeUpdate();
 			
-			System.out.println("df" + rowsInserted);
-			
 			if (rowsInserted > 0) {
 				buffer.append("<html><title>Preferenza inserita!</title></html>");
 			} else {

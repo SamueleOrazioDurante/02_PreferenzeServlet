@@ -12,6 +12,7 @@ import javax.servlet.ServletConfig;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 
 public class login extends HttpServlet {
@@ -68,6 +69,13 @@ public class login extends HttpServlet {
                 
 				int idClasse = result.getInt("idClasse");
 				int matricola = result.getInt("matricola");
+				
+				HttpSession sess = reqt.getSession();
+				if(sess != null) {
+					sess.invalidate();
+				}
+				sess = reqt.getSession();
+				sess.setAttribute("matricola", matricola);
 
 				buffer.append("<html><title>Logged user: "+username+"</title>");
 				buffer.append("<body><form name='preferenza' action='http://localhost:8080/02_PreferenzeServlet/preferenza' method='GET'>");
