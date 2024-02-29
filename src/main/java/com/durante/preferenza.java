@@ -2,6 +2,7 @@ package com.durante;
 
 
 import java.io.IOException;
+import java.lang.Throwable;
 import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -51,17 +52,20 @@ public class preferenza extends HttpServlet {
 	public void doGet(HttpServletRequest reqt, HttpServletResponse res) throws IOException
 	{
 		
+		//INSERIRE SESSIONI
+		
+		res.setContentType("text/html");
+		PrintWriter out = res.getWriter();
+		StringBuffer buffer = new StringBuffer();
+		
 		try {
-			res.setContentType("text/html");
-			PrintWriter out = res.getWriter();
-			StringBuffer buffer = new StringBuffer();
 			
 			String matricola = reqt.getParameter("matricola");
 			String idProfessore = reqt.getParameter("idProfessore");
 
 			String sql = "INSERT INTO preferenze (matricola, idProfessore) VALUES ('"+matricola+"', '"+idProfessore+"')";
 			
-			
+
 			PreparedStatement statement = conn.prepareStatement(sql);
 			
 			int rowsInserted = statement.executeUpdate();
@@ -69,24 +73,26 @@ public class preferenza extends HttpServlet {
 			if (rowsInserted > 0) {
 				buffer.append("<html><title>Preferenza inserita!</title></html>");
 			} else {
-				buffer.append("<html><title>Errore. Preferenza già inserita.</title></html>");
+				
 			}
 			
-			out.println(buffer.toString());
-			out.close();
-
 			statement.close();
 			conn.close();
+			
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			
+			buffer.append("<html><title>Errore. Preferenza già inserita.</title></html>");
+			
 		}
-
+			
 		
-
-		
+		out.println(buffer.toString());
+		out.close();	
 		
 	}
+	
 	@Override
 	public void doPost(HttpServletRequest reqt, HttpServletResponse res)
 	{

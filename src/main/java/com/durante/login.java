@@ -2,6 +2,8 @@ package com.durante;
 
 
 import java.io.PrintWriter;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -10,6 +12,7 @@ import javax.servlet.ServletConfig;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 
 public class login extends HttpServlet {
@@ -52,6 +55,7 @@ public class login extends HttpServlet {
 		
 		String username = reqt.getParameter("username");
 		String password = reqt.getParameter("password");
+		//password = encryptPassword(password);
 		
 		String query = "SELECT usernameStudente,idClasse,matricola FROM studenti WHERE usernameStudente = '"+ username + "' AND password = '"+ password + "'";
 		
@@ -65,6 +69,13 @@ public class login extends HttpServlet {
                 
 				int idClasse = result.getInt("idClasse");
 				int matricola = result.getInt("matricola");
+				
+				HttpSession sess = reqt.getSession();
+				if(sess != null) {
+					sess.invalidate();
+				}
+				sess = reqt.getSession();
+				sess.setAttribute("matricola", matricola);
 
 				buffer.append("<html><title>Logged user: "+username+"</title>");
 				buffer.append("<body><form name='preferenza' action='http://localhost:8080/02_PreferenzeServlet/preferenza' method='GET'>");
@@ -86,9 +97,17 @@ public class login extends HttpServlet {
 				buffer.append("<p><INPUT TYPE='reset' NAME='resetbutton' VALUE='Clear data'> </p>");
 				buffer.append("</form></body></html>");
 				
-				out.println(buffer.toString());
-				out.close();
+				
+			}else {
+				
+				buffer.append("<html><title>Error Page</title>");
+				buffer.append("<body><h1>Username o Password errati</h2>");
+				buffer.append("<p><a href='index.html'>Torna al Login </a><p></body></html>");			
+				
 			}
+			
+			out.println(buffer.toString());
+			out.close();
 			
 		}catch(Exception e) {
 			e.printStackTrace();
@@ -100,6 +119,23 @@ public class login extends HttpServlet {
 	{
 		throw new java.lang.UnsupportedOperationException("Not supported yet.");
 	}
+	
+	private String encryptPassword(String password) {
+        try {
+            MessageDigest md = MessageDigest.getInstance("SHA-256");
+            byte[] hash = md.digest(password.getBytes());
+            StringBuilder hexString = new StringBuilder();
+            for (byte b : hash) {
+                String hex = Integer.toHexString(0xff & b);
+                if (hex.length() == 1) hexString.append('0');
+                hexString.append(hex);
+            }
+            return hexString.toString();
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
 
 }
 
