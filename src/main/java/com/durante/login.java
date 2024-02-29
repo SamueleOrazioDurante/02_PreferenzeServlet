@@ -13,6 +13,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.time.*;
+import java.time.format.DateTimeFormatter;
 
 
 public class login extends HttpServlet {
@@ -53,11 +55,11 @@ public class login extends HttpServlet {
 		
 		
 		
-		String username = reqt.getParameter("username");
+		String email = reqt.getParameter("email");
 		String password = reqt.getParameter("password");
 		//password = encryptPassword(password);
 		
-		String query = "SELECT usernameStudente,idClasse,matricola FROM studenti WHERE usernameStudente = '"+ username + "' AND password = '"+ password + "'";
+		String query = "SELECT email,classe FROM studente WHERE email = '"+ email + "' AND password = '"+ password + "'";
 		
 		try {
 			res.setContentType("text/html");
@@ -66,35 +68,32 @@ public class login extends HttpServlet {
 			
 			ResultSet result = conn.createStatement().executeQuery(query);
 			if(result.next()) {
-                
-				int idClasse = result.getInt("idClasse");
-				int matricola = result.getInt("matricola");
 				
 				HttpSession sess = reqt.getSession();
+
 				if(sess != null) {
 					sess.invalidate();
 				}
 				sess = reqt.getSession();
-				sess.setAttribute("matricola", matricola);
+				sess.setAttribute("email", email);
+				sess.setAttribute("password", password);
 
-				buffer.append("<html><title>Logged user: "+username+"</title>");
-				buffer.append("<body><form name='preferenza' action='http://localhost:8080/02_PreferenzeServlet/preferenza' method='GET'>");
-				buffer.append("<INPUT TYPE='hidden' NAME='matricola' SIZE=30 value='" + matricola + "' readonly>");
-                buffer.append("<p>Username: <INPUT TYPE='text' NAME='username' SIZE=30 value='" + username + "' readonly disabled></p>");
-				buffer.append("<p>Cognome Prof.: <SELECT NAME='idProfessore'>");
-                buffer.append("<option value='-1' selected> Seleziona una preferenza </option>");
+				buffer.append("<html><title>Logged user: "+email+"</title>");
+				buffer.append("<body>");
+                buffer.append("<p>E-mail: <INPUT TYPE='text' NAME='email' SIZE=50 value='" + email + "' readonly disabled></p>");
+				buffer.append("<p>Data e ora corrente: </p>" + ZonedDateTime.now(ZoneId.of("Europe/Rome")));
 
-				query = "SELECT idProfessore,cognomeProfessore FROM professori WHERE idClasse= '"+ idClasse+"'";
-				ResultSet prof= conn.createStatement().executeQuery(query);
-				while(prof.next()){
-					int idProfessore = prof.getInt("idProfessore");
-					String cognomeProfessore = prof.getString("cognomeProfessore");
-					buffer.append("<option value='"+ idProfessore +"'> "+ cognomeProfessore +" </option>");
+				String classe = result.getString("classe");
+
+				query = "SELECT titolo FROM libro INNER JOIN catalogo ON catalogo.idLibro=libro.idLibro WHERE nomeClasse= '"+ classe +"'";
+				ResultSet libri= conn.createStatement().executeQuery(query);
+
+				while(libri.next()){
+
+					String titolo = libri.getString("titolo");
+					buffer.append("<p> "+ titolo +" </p>");
 				}
 
-				buffer.append("</select> </p>");
-				buffer.append("<p><INPUT TYPE='submit'></p>");
-				buffer.append("<p><INPUT TYPE='reset' NAME='resetbutton' VALUE='Clear data'> </p>");
 				buffer.append("</form></body></html>");
 				
 				
